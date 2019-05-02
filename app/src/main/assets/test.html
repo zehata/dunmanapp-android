@@ -1,0 +1,103 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Project Undy</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css.css">
+	<!-- <script src="./js.js"></script> -->
+	<style>
+	*{
+		padding: 0;
+		margin:0;
+		font-family: Roboto, Segoe UI Light, Helvetica, Arial;
+	}
+.venues{
+	background-color: grey;
+	width: 50vw;
+	position: absolute;
+	height: 33vh;
+	border: solid 1px white;
+	color: white;
+	text-align: center;
+}
+#y1{
+	top: 0vh;
+}
+#y2{
+	top: 33vh;
+	height: 34vh;
+}
+#y3{
+	top: 67vh;
+}
+#y4{
+	top: 0vh;
+	right: 0;
+}
+#y5{
+	top: 33vh;
+	height: 34vh;
+	right: 0;
+}
+#y6{
+	top: 67vh;
+	right: 0;
+}
+#venuewrapper{
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+}
+.textwrapper{
+	position: absolute;
+	top: 43%;
+	width: 100%;
+	text-align: center;
+}
+	</style>
+</head>
+<body>
+	<div id="darken" onclick="hidenav()"></div>
+
+	<div style="position: fixed; background-color: grey; left: 5vw; z-index:1; top: 20px; text-align: center; width: 90vw; height: 20px; color:white;" id="date"></div>
+
+	<div id="venuewrapper">
+	</div>
+
+	<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+	<script type="text/javascript">
+function $(name){
+	return document.getElementById(name);
+}
+	
+		var d = new Date();
+		var datetoday = (d.getFullYear())+"-"+((function(){if((d.getMonth()+1)<10 ){return "0"+(d.getMonth()+1)}else{return d.getMonth()}})())+"-"+((function(){if((d.getDate())<10 ){return "0"+(d.getDate())}else{return d.getDate()}})());
+
+	  		var venues = getappdata()[datetoday];
+	  		$('date').innerHTML = datetoday;
+			for(var i = 1; i < 4; i++){
+				var venuediv = document.createElement('DIV');
+				venuediv.className = "venues";
+				venuediv.id = "y"+(i);
+				var venueno = venues[i];
+				if (typeof venueno === "number"){
+					venuediv.innerHTML = '<div class="textwrapper">Y'+(i)+"<br/>"+["Parade Square","Hall","Classrooms","Auditorium"][venueno]+'</div>';
+				} else {
+					venuediv.innerHTML = '<div class="textwrapper">Y'+(i)+'<br/>'+venues[i]+'</div>';
+				}
+				document.getElementById('venuewrapper').appendChild(venuediv);
+			}
+			for(var i = 5; i < 8; i++){
+				var venuediv = document.createElement('DIV');
+				venuediv.className = "venues";
+				venuediv.id = "y"+(i-1);
+				var venueno = venues[i];
+				venuediv.innerHTML = '<div class="textwrapper">Y'+(i-1)+"<br/>"+["Parade Square","Hall","Classrooms","Auditorium"][venueno]+'</div>';
+				document.getElementById('venuewrapper').appendChild(venuediv);
+			}
+
+	</script>
+</body>
+</html>

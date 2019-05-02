@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<div style="width: 10vw; height: 10vw; background-color: black;" onclick="test0();"></div>
+	<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+	<script>
+	  // Initialize Firebase
+	  var config = {
+	    apiKey: "AIzaSyDfAkKocOAk3Elv9V5x0Po4NXuuGGCfdng",
+	    authDomain: "dhypetest0.firebaseapp.com",
+	    databaseURL: "https://dhypetest0.firebaseio.com",
+	    projectId: "dhypetest0",
+	    storageBucket: "",
+	    messagingSenderId: "677082806183"
+	  };
+	  firebase.initializeApp(config);
+	  var database = firebase.database();
+
+	  function test0(){
+		firebase.database().ref('apps/').set({
+		  test: 'it works!'
+		});
+	  }
+	</script>
+</body>
+</html>

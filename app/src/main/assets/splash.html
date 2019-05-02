@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			font-family: Roboto;
+			user-select: none;
+		}
+		#overlayer{
+			display: flex;
+			flex-direction: column;
+			position: fixed;
+			width: 100vw;
+			top:0;
+			left: 0;
+			height: 100vh;
+		}
+		#signinwrapper{
+			width: fit-content;
+			display: flex;
+			flex-direction: column;
+			margin: auto;
+		}
+		#signintext{
+			margin:auto;
+			width: fit-content;
+			font-family: Google Sans Display, Roboto;
+			font-size: 1.2em;
+    		transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+		}
+		#logo{
+			width: 100px;
+			height: 100px;
+			margin: auto;
+			margin-bottom: 40px;
+    		transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+		}
+		#signinbutton{
+			margin: auto;
+			margin-top: 20px;
+			width: 30px;
+			height:30px;
+			border-radius: 25px;
+			background-color: rgb(0, 32, 96);
+			padding: 10px;
+		}
+		#nextimg{
+			margin: auto;
+			width: 100%;
+			height: 100%;
+		}
+		#welcome{
+			font-family: Google Sans Display, Roboto;
+			margin: auto;
+			font-size: 1.2em;
+		}
+		#info{
+    		transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+			margin: auto;
+			height: 0px;
+			overflow: hidden;
+		}
+		#levelwrapper{
+			margin: auto; 
+			font-family: Google Sans Display, Roboto; 
+			width: fit-content; 
+			margin-top: 20px;
+			display: flex;
+			flex-direction: column;
+		}
+		#leveldrop{
+			border: 1px solid rgb(0, 32, 96);
+			border-radius: 3px;
+			font-family: Google Sans Display, Roboto;
+			margin: auto;
+			width: 100%;
+			margin-top: 10px;
+		}
+		#leveldrop:focus{
+			outline: none;
+		}
+		#confirmlevel{
+			margin: auto;
+			margin-top: 20px;
+			width: 30px;
+			height:30px;
+			border-radius: 25px;
+			background-color: rgb(0, 32, 96);
+			padding: 10px;
+		}
+		#nextimg2{
+			margin: auto;
+			width: 100%;
+			height: 100%;
+		}
+		#email{
+			margin: auto;
+			font-family: Google Sans Display, Roboto;
+			width: fit-content;
+			padding: 2px;
+			padding-left: 10px;
+			padding-right: 10px;
+			border-radius: 30px;
+			margin-top: 10px;
+			border: 1px solid rgb(0, 32, 96);
+		}
+		#overlayer{
+			opacity: 0;
+		}
+	</style>
+</head>
+<body>
+	<div id="overlayer">
+		<div style="flex-grow: 1;"></div>
+		<div id="signinwrapper">
+			<img src="Dunman-High-School.jpg" id="logo" alt="">
+			<div id="signintext">Sign in with your DHS account</div>
+			<div id="signinbutton" onclick="startGSO();"><img src="next.png" id="nextimg2" alt=""/></div>
+			<div id="info">
+				<div id="welcome"></div>
+				<div id="email"></div>
+				<div id="levelwrapper">Confirm your level
+					<select name="level" id="leveldrop">
+						<option value="0">Year 1</option>
+						<option value="1">Year 2</option>
+						<option value="2">Year 3</option>
+						<option value="3">Year 4</option>
+						<option value="4">Year 5</option>
+						<option value="5">Year 6</option>
+					</select>
+				</div>
+				<div id="confirmlevel" onclick="confirmlevel();"><img src="next.png" id="nextimg" alt=""/></div>
+			</div>
+		</div>
+		<div style="flex-grow: 1;"></div>
+	</div>
+	<script>
+		var runningInAndroid = true;
+		try{
+			Android.consolelog('hi');
+		} catch (e){
+			runningInAndroid = false;
+		}
+		if(localStorage.getItem('authed')){
+			// skip sign in
+			if(runningInAndroid){
+				Android.enabledrawer();
+				Android.signinsuccess();
+			}
+		} else {
+			document.getElementById('overlayer').style.opacity = "1";
+		}
+		function startGSO(){
+			if(runningInAndroid){
+				Android.gso();
+			}
+		}
+		var googleemail = "";
+		var classyear;
+		var username = "";
+		function success(email,name){
+			googleemail = email;
+			var level = Number(name[3]);
+			username = name;
+			document.getElementById('signintext').style.opacity = "0";
+			document.getElementById('signinbutton').style.opacity = "0";
+			document.getElementById('signintext').style.height = "0";
+			document.getElementById('signintext').style.innerHTML = "";
+			document.getElementById('signinbutton').style.height = "0";
+			document.getElementById('signinbutton').style.padding = "0";
+			document.getElementById('signinbutton').style.marginTop = "0";
+			document.getElementById('info').style.height = "300px";
+			document.getElementById('welcome').innerHTML = "Welcome, "+name;
+			document.getElementById('email').innerHTML = email;
+			document.getElementById('googleaccountname',name);
+			document.getElementById('leveldrop').selectedIndex = (level-1);
+			classyear = 10*Number(name[0]) + Number(name[1]);
+			classyear += (6-level);
+		}
+		function confirmlevel(){
+			localStorage.setItem('classOf',classyear);
+			localStorage.setItem('googleaccountname',username);
+			localStorage.setItem('googleaccountemail',googleemail);
+			localStorage.setItem('authed',true);
+			localStorage.setItem('studentlvl',((document.getElementById('leveldrop').selectedIndex)+1));
+			if(runningInAndroid){
+				Android.enabledrawer();
+				Android.signinsuccess();
+			}
+		}
+		function failed(){
+			document.getElementById('signintext').innerHTML = "Authentication failed, make sure you are using your DHS account";
+		}
+	</script>
+</body>
+</html>
