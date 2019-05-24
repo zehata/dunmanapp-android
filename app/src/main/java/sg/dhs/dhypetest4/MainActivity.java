@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     static signOut signOut;
     static DrawerLayout mDrawerLayout;
     static boolean inter;
+    static int topinset;
 
     static ArrayList<String> drawerList = new ArrayList<>();
 
@@ -77,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         100);
             }
         }
+
+        topinset = getStatusBarHeight();
 
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -157,6 +160,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
         inter = isNetworkAvailable();
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     @Override
