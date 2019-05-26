@@ -114,6 +114,8 @@ body{
 }
 .minicard{
 	min-width: 90px;
+	max-width: 90px;
+	width: 90px;
 	padding: 10px;
 	height: 140px;
 	background-color: white;
